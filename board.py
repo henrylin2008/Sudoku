@@ -93,7 +93,7 @@ def solve(bor):
 
     for i in range(1, 10):              # loop through values 1 to 9
         if valid(bor, i, (row, col)):   # check if inserted number is a valid solution
-            bor[row][col] == i          # if valid, add the number to the board
+            bor[row][col] = i          # if valid, add the number to the board
 
             if solve(bor):              # recursively try finish the solution by calling the solve function
                 return True
