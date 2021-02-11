@@ -11,6 +11,35 @@ board = [
 ]
 
 
+def print_board(bor):  # print out the board
+    for i in range(len(bor)):
+        if i % 3 == 0 and i != 0:  # every 3 rows, print ------
+            print("- - - - - - - - - - - -")
+
+        for j in range(len(bor[0])):  # every position in row
+            if j % 3 == 0 and j != 0:  # on every 3rd element but not first column
+                print(" | ", end="")  # end="": don't go to next line
+
+            if j == 8:  # last position in the row
+                print(bor[i][j])  # draw /n, make sure it goes to the next line
+            else:
+                print(str(bor[i][j]) + " ", end="")
+
+
+# print_board(board)
+
+
+def find_empty(bor):  # find empty space
+    for i in range(len(bor)):
+        for j in range(len(bor[0])):  # len of each row
+            if bor[i][j] == 0:        # if the space is 0
+                return (i, j)           # tuple: (row, col)
+
+    return None     # if no square == 0
+
+
+# find_empty(board)
+
 def valid(bor, num, pos):
     # check if the board is valid
     # bor: board;
@@ -50,31 +79,31 @@ def valid(bor, num, pos):
     return True
 
 
-def print_board(bor):  # print out the board
-    for i in range(len(bor)):
-        if i % 3 == 0 and i != 0:  # every 3 rows, print ------
-            print("- - - - - - - - - - - -")
+def solve(bor):
+    # use backtrack, recursive
+    # base case: the board is full, solution is found
 
-        for j in range(len(bor[0])):  # every position in row
-            if j % 3 == 0 and j != 0:  # on every 3rd element but not first column
-                print(" | ", end="")  # end="": don't go to next line
+    # base case
+    find = find_empty(bor)
+    if not find:
+        # the solution is found
+        return True
+    else:
+        row, col = find
 
-            if j == 8:  # last position in the row
-                print(bor[i][j])  # draw /n, make sure it goes to the next line
-            else:
-                print(str(bor[i][j]) + " ", end="")
+    for i in range(1, 10):              # loop through values 1 to 9
+        if valid(bor, i, (row, col)):   # check if inserted number is a valid solution
+            bor[row][col] == i          # if valid, add the number to the board
 
+            if solve(bor):              # recursively try finish the solution by calling the solve function
+                return True
 
-# print_board(board)
+            bor[row][col] = 0           # backtrack; reset last element to a different value
 
-
-def find_empty(bor):  # find empty space
-    for i in range(len(bor)):
-        for j in range(len(bor[0])):  # len of each row
-            if bor[i][j] == 0:        # if the space is 0
-                return (i, j)           # tuple: (row, col)
-
-    return None
+    return False
 
 
-# find_empty(board)
+print_board(board)
+solve(board)
+print("___________________")
+print_board(board)
