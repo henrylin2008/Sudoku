@@ -49,30 +49,31 @@ def valid(bor, num, pos):
     # Check row
     for i in range(len(bor[0])):    # every single column: 0-8
         # bor[0]: first row
-        if bor[pos[0]][i] == num and pos[1] != i:
+        if bor[pos[0]][i] == num and pos[1] != i:   # if duplicate/same number in the row but not current position
             # bor[pos[0]][i] == num: each element in the row == the number just added in
             # pos[1] != i: the position the number just inserted into, then ignore; check rest positions on the row
             return False
 
     # check Column
     for i in range(len(bor)):   # every single row: 0-8
-        if bor[i][pos[1]] == num and pos[0] != i:
+        if bor[i][pos[1]] == num and pos[0] != i:   # if duplicate/same number in the column and not current position
             # bor[i][pos[1]] == num: every element in the column == the number just inserted in
             # pos[0] != i: not the position; check other positions
             return False
 
-    # check 3x3 box, which box
+    # check 3x3 (9) box, which box
     # 00 | 01 | 02
     # 10 | 11 | 12
     # 20 | 21 | 22
-    box_x = pos[1] // 3    # x position, 0, 1, 2
-    box_y = pos[0] // 3    # 0, 1, 2
+    box_x = pos[1] // 3    # column; x position: 0, 1, 2
+    box_y = pos[0] // 3    # row; y position: 0, 1, 2
+    # loop through every 3x3 box
     for i in range(box_y*3, box_y*3 + 3):
         # box_y*3: the result of box_y is 0,1,2, for box on the far right, x3 will give the index position: 6,7,8
         # +3: will wrap around the index to next row, but for loop does not go beyond last item in the row
         for j in range(box_x*3, box_x*3 + 3):
-            if bor[i][j] == num and (i, j) != pos:
-                # bor[i][j] == num: if any number in the box == number just inserted in
+            if bor[i][j] == num and (i, j) != pos:  # if duplicate number in the 3x3 box
+                # bor[i][j] == num: if any number in the 3x3 box == number just inserted in
                 # (i, j) != pos: skip the position the number just inserted in
                 return False
 
@@ -93,7 +94,7 @@ def solve(bor):
 
     for i in range(1, 10):              # loop through values 1 to 9
         if valid(bor, i, (row, col)):   # check if inserted number is a valid solution
-            bor[row][col] = i          # if valid, add the number to the board
+            bor[row][col] = i           # if valid, add the number to the board
 
             if solve(bor):              # recursively try finish the solution by calling the solve function
                 return True
@@ -103,7 +104,7 @@ def solve(bor):
     return False
 
 
-print_board(board)
-solve(board)
-print("___________________")
-print_board(board)
+# print_board(board)
+# solve(board)
+# print("___________________")
+# print_board(board)
